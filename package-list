@@ -1,7 +1,9 @@
 ca.josephroque.bowlingcompanion
 ca.josephroque.bowlingcompanion.adapter
+ca.josephroque.bowlingcompanion.data
 ca.josephroque.bowlingcompanion.database
 ca.josephroque.bowlingcompanion.dialog
 ca.josephroque.bowlingcompanion.fragment
 ca.josephroque.bowlingcompanion.theme
 ca.josephroque.bowlingcompanion.utilities
+ca.josephroque.bowlingcompanion.view
