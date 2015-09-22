@@ -1,9 +1,5 @@
 package ca.josephroque.bowlingcompanion;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -193,9 +189,6 @@ public class MainActivity
     /** Items in the navigation drawer. */
     private ArrayList<String> mListDrawerOptions;
 
-    /** AdView to display ads to user. */
-    private AdView mAdView;
-
     /** The primary floating action button. */
     private AnimatedFloatingActionButton mPrimaryFab;
 
@@ -258,8 +251,6 @@ public class MainActivity
             mDrawerAdapter.notifyDataSetChanged();
         }
 
-        setupAdView();
-
         //Checks if the user should be prompted to rate the app
         AppRater.appLaunched(this);
     }
@@ -301,9 +292,6 @@ public class MainActivity
         super.onResume();
         mAppIsRunning.set(true);
 
-        if (mAdView != null && mAdView.getVisibility() == View.VISIBLE)
-            mAdView.resume();
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -335,16 +323,12 @@ public class MainActivity
 
     @Override
     protected void onPause() {
-        if (mAdView != null && mAdView.getVisibility() == View.VISIBLE)
-            mAdView.pause();
         super.onPause();
         mAppIsRunning.set(false);
     }
 
     @Override
     protected void onDestroy() {
-        if (mAdView != null && mAdView.getVisibility() == View.VISIBLE)
-            mAdView.destroy();
         super.onDestroy();
     }
 
@@ -903,43 +887,6 @@ public class MainActivity
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-    }
-
-    /**
-     * Sets up the AdView and requests an ad.
-     */
-    private void setupAdView() {
-        //Sets the adview to display an ad to the user
-        mAdView = (AdView) findViewById(R.id.av_main);
-        mAdView.setAdListener(new AdListener() {
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                //If ad fails to load, hides this adview
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdView.destroy();
-                        mAdView.setVisibility(View.GONE);
-                    }
-                });
-            }
-
-            @Override
-            public void onAdLoaded() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdView.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
-        });
-        AdRequest.Builder builder = new AdRequest.Builder()
-                .addTestDevice("B3EEABB8EE11C2BE770B684D95219ECB")
-                .addTestDevice("F2B8E706AC77AA09B97D016DB70BF723")
-                .addTestDevice("7387C5A63BE83E951937A7F2842F6C28")
-                .addTestDevice("699FFDF176FEE8F8B6AD7E3D322A43AB");
-        mAdView.loadAd(builder.build());
     }
 
     /**
